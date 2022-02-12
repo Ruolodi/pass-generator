@@ -1,26 +1,43 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="nav">
+    <div class="blockBtn">
+      <button class="btn" @click="switcher = !switcher">
+        {{ switcher ? "Показать карточки" : "Скрыть карточки" }}
+      </button>
+    </div>
+  </div>
+  <input-ps></input-ps>
+  <div v-if="switcher">
+    <cards-password
+      :passwords="passwords"
+      v-for="(items, id) in passwords"
+      :key="items"
+      :id="id"
+    ></cards-password>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import cardsPasswordVue from "./components/cardsPassword.vue"
+import inputPs from "./components/inputPs.vue"
 
 export default {
-  name: 'App',
+  data() {
+    return {
+      switcher: true,
+      passwords: [],
+    }
+  },
   components: {
-    HelloWorld
-  }
+    "input-ps": inputPs,
+    "cards-password": cardsPasswordVue,
+  },
+  provide() {
+    return {
+      passwords: this.passwords,
+    }
+  },
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style></style>
