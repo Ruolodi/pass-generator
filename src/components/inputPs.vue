@@ -8,9 +8,11 @@
     <input type="text" v-model.trim="oldPassword" />
     <small>Cгенерированный пароль:</small>
     <input type="text" v-model.trim="generatedPassword" />
-    <button class="btn" @click="generate">Generate</button>
+    <button class="btn" @click="generate(false)">Generate</button>
+    <button class="btn" @click="generate(true)">
+      Generate strong password
+    </button>
     <button class="btn" @click="save">Save</button>
-    <button class="btn">Test</button>
   </div>
 </template>
 
@@ -29,7 +31,7 @@ export default {
         this.oldPassword.length === 0 &&
         this.generatedPassword.length === 0
       ) {
-        this.errorCheck = true
+        this.errorCheck = trueФ
       } else {
         this.passwords.push({
           old: this.oldPassword,
@@ -37,78 +39,61 @@ export default {
         })
       }
     },
-    generate() {
+    generate(strong) {
+      //strong получает булевое и генерация происходит с добавлением спец символов при TRUE
+      let arrCheck = []
       if (this.oldPassword.length === 0) {
-        this.errorCheck = true
-      } else {
-        let oldLength = this.oldPassword.split("").length
-        let arrCheck = this.oldPassword.split("")
-        let arr_en = [
-          "a",
-          "b",
-          "c",
-          "d",
-          "e",
-          "f",
-          "g",
-          "h",
-          "i",
-          "j",
-          "k",
-          "l",
-          "m",
-          "n",
-          "o",
-          "p",
-          "q",
-          "r",
-          "s",
-          "t",
-          "u",
-          "v",
-          "w",
-          "x",
-          "y",
-          "z",
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
-          "G",
-          "H",
-          "I",
-          "J",
-          "K",
-          "L",
-          "M",
-          "N",
-          "O",
-          "P",
-          "Q",
-          "R",
-          "S",
-          "T",
-          "U",
-          "V",
-          "W",
-          "X",
-          "Y",
-          "Z",
-        ]
-        let arr_symb = ["!", ",", ".", "$", "%", "&", "?", "-", "+", "="]
-
-        let arr_num = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-
-        for (let i = 0; i < oldLength; i++) {
-          if (!isNaN(arrCheck[i])) {
-            arrCheck[i] = arr_num[Math.floor(Math.random() * 11)]
-          } else {
-            arrCheck[i] = arr_en[Math.floor(Math.random() * 53)]
+        //Проверка на пустое поле и заполнение в случае true
+        for (let i = 0; i < 8; i++) {
+          switch (Math.floor(Math.random() * 3)) {
+            case 0:
+              arrCheck[i] = String.fromCharCode(
+                Math.floor(Math.random() * (90 - 65) + 65)
+              )
+              break
+            case 1:
+              arrCheck[i] = String.fromCharCode(
+                Math.floor(Math.random() * (122 - 97) + 97)
+              )
+              break
+            case 2:
+              arrCheck[i] = String.fromCharCode(
+                Math.floor(Math.random() * (57 - 48) + 48)
+              )
+              break
           }
-          this.generatedPassword = arrCheck.join("")
         }
+        this.oldPassword = arrCheck.join("")
+      }
+      let oldLength = this.oldPassword.split("").length
+      arrCheck = this.oldPassword.split("")
+      /* let arr_symb = ["!", ",", ".", "$", "%", "&", "?", "-", "+", "="] */
+
+      for (let i = 0; i < oldLength; i++) {
+        if (strong && !Math.floor(Math.random() * 3)) {
+          //проверка на сложность пароля, и вероятность выдать спецсимволы 33 процента из-за !
+          arrCheck[i] = String.fromCharCode(
+            Math.floor(Math.random() * (47 - 33) + 33)
+          )
+        } else {
+          if (!isNaN(arrCheck[i])) {
+            arrCheck[i] = String.fromCharCode(
+              //ASCII таблица
+              Math.floor(Math.random() * (57 - 48) + 48) //рандомит номер символа в выбранном диапазоне
+            ) //рандом чисел в строке
+          } else {
+            if (Math.floor(Math.random() * 2)) {
+              arrCheck[i] = String.fromCharCode(
+                Math.floor(Math.random() * (90 - 65) + 65)
+              ) //рандом больших букв английского алфавита
+            } else {
+              arrCheck[i] = String.fromCharCode(
+                Math.floor(Math.random() * (122 - 97) + 97)
+              ) //рандом маленьких букв английского алфавита
+            }
+          }
+        }
+        this.generatedPassword = arrCheck.join("")
       }
     },
   },

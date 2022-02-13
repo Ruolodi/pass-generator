@@ -2,7 +2,7 @@
   <div class="nav">
     <div class="blockBtn">
       <button class="btn" @click="switcher = !switcher">
-        {{ switcher ? "Показать карточки" : "Скрыть карточки" }}
+        {{ switcher ? "Скрыть карточки" : "Показать карточки" }}
       </button>
     </div>
   </div>

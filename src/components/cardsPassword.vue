@@ -1,5 +1,5 @@
 <template>
-  <div class="passwordCard" @click="check(id)">
+  <div class="passwordCard">
     <h1>
       Старый пароль:
       <h2>{{ passwords[id].old }}</h2>
@@ -8,6 +8,7 @@
       Сгенерированный пароль:
       <h2>{{ passwords[id].generated }}</h2>
     </h1>
+    <button class="btnPassCard" @click="deletePass(id)">Удалить карту</button>
   </div>
 </template>
 
@@ -20,6 +21,9 @@ export default {
   methods: {
     check(id) {
       console.log(this.passwords[id])
+    },
+    deletePass(id) {
+      this.passwords.splice(id, 1)
     },
   },
 }
